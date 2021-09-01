@@ -1,10 +1,10 @@
 // server code
 const express = require('express');
 const Datastore = require('nedb');
-//const fetch = require('node-fetch');
+const fetch = import('node-fetch');
 require('dotenv').config();
 //console log it to check api_key is in the environment variables
-//console.log(process.env);
+console.log(process.env);
 
 const app = express();
 //start server and listening requests at port 3000
@@ -65,7 +65,7 @@ app.get('/weather/:latlon', async (request, response) => {
     const latlon = request.params.latlon.split(',');
     const lat = latlon[0];
     const lon = latlon[1];
-    const api_key = '48925770c7f67eb6c14592fa874b8bac'; // process.env.API_KEY;
+    const api_key = process.env.API_KEY;
     const weather_url = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${api_key}`;
     // fetch is usually a client side command, for it to work on server side, it must be installed first
     // npm install node-fetch, then add require('node-fetch') at the top

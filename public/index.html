@@ -79,9 +79,9 @@
                     //open weather api allows CORS, if not, the api call has to be made from the server code
                     // in general, api calls from server side is safer 
                     
-                    const api_key = '48925770c7f67eb6c14592fa874b8bac'; // process.env.API_KEY;
-                    const api_url = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${api_key}`;
-                    //const api_url = `weather/${lat},${lon}`;
+                    //const api_key = '48925770c7f67eb6c14592fa874b8bac'; // process.env.API_KEY;
+                    //const api_url = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${api_key}`;
+                    const api_url = `weather/${lat},${lon}`;
                     const response = await fetch(api_url);
                     const json = await response.json();
                     
