@@ -1,7 +1,7 @@
 // server code
 const express = require('express');
 const Datastore = require('nedb');
-const fetch = import('node-fetch');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args)); //refer to npm documentation
 require('dotenv').config();
 //console log it to check api_key is in the environment variables
 console.log(process.env);
@@ -60,6 +60,8 @@ app.get('/api', (request,response) => {
         response.json(data);
         //response.json({test: 123});
     });
+});
+
 
 app.get('/weather/:latlon', async (request, response) => {
     const latlon = request.params.latlon.split(',');
@@ -72,6 +74,4 @@ app.get('/weather/:latlon', async (request, response) => {
     const fetch_response = await fetch(weather_url);
     const weather_data = await fetch_response.json();
     response.json(weather_data);
-})
-
 });
