@@ -1,0 +1,21 @@
+{
+  "name": "module2",
+  "version": "1.0.0",
+  "description": "data selfie app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "data",
+    "selfie"
+  ],
+  "author": "Chengwen Qu",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "nedb": "^1.8.0",
+    "node-fetch": "^3.0.0"
+  }
+}

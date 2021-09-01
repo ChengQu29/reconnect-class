@@ -1,0 +1,99 @@
+<!--client side code-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/addons/p5.dom.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <h1>Data Selfie App</h1>
+    <div><a href="/">check in</a> | <a href="/logs.html">view checkins</a></div>
+    <p>
+        latitude: <span id="latitude"></span>&deg; longitude: <span id="longitude"></span>&deg;
+    </p>
+    <p>
+        The weather here is <span id="summary"></span> with a temperature of <span id="temperature"></span>&deg; celsius.
+    </p>
+    <p>
+        <input id = "mood" type="text">
+        <button id="submit">submit</button>
+    </p>
+    
+    <script>
+        function setup(){
+            noCanvas();
+            //createCapture is a p5 library function
+            const video = createCapture(VIDEO);
+            video.size(160,120);
+
+            let lat, lon;
+            const button = document.getElementById('submit');
+            button.addEventListener('click', async event => {
+                const mood = document.getElementById('mood').value;
+                video.loadPixels();
+                const image64 = video.canvas.toDataURL();
+                //get the geolocation data, and make an javascript object, put the data in
+                const data = { lat, lon, mood, image64 };
+                //refer to fetch documentation for options
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data) // json string format for sending it to the server
+                };
+
+                //second argument is a javascript object
+                /*
+                fetch('/api', options).then(response => {
+                    console.log(response);
+                });
+                */
+
+                //sending the data (the post)
+                const response = await fetch('/api', options);
+                //receive the data and log it on the client browser, finish the handshake (only works if the function is asynchornous)
+                const json = await response.json()
+                console.log(json);
+            })
+        
+            //the geolocation object 
+            //the geolocation api is published through the navigator.geolocation object
+            //refer to documentation
+            //https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API/Using_the_Geolocation_API
+            if ('geolocation' in navigator) {
+                //test if geolocation is available on the client browser
+                console.log('geolocation available');
+                navigator.geolocation.getCurrentPosition(async position => {
+                    //console.log(position.coords.latitude, position.coords.longitude);
+                    //console.log(position);
+                    lat = position.coords.latitude;
+                    lon = position.coords.longitude;
+                    document.getElementById('latitude').textContent = lat.toFixed(2);
+                    document.getElementById('longitude').textContent = lon.toFixed(2);
+                    //refer to https://openweathermap.org/current
+                    //open weather api allows CORS, if not, the api call has to be made from the server code
+                    // in general, api calls from server side is safer 
+                    
+                    const api_key = '48925770c7f67eb6c14592fa874b8bac'; // process.env.API_KEY;
+                    const api_url = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${api_key}`;
+                    //const api_url = `weather/${lat},${lon}`;
+                    const response = await fetch(api_url);
+                    const json = await response.json();
+                    
+                    document.getElementById('summary').textContent = json.weather[0].description;
+                    document.getElementById('temperature').textContent = (json.main.temp-273.15).toFixed(1);
+                    console.log(json);
+
+                });
+            }else {
+                console.log('geolocation not available');
+            }
+        }    
+    </script>
+</body>
+</html>

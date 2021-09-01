@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+      integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+      integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+      crossorigin=""
+    ></script>
+    <style>
+      #checkinMap {
+        height: 360px;
+      }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    
+    <h1>Data Selfie App</h1>
+    <div><a href="/">back</a>
+    <br />
+    <div>sort by <a href="#" id = "time">time</a></div>
+    <div id = "checkinMap"></div>
+
+    <script>
+        // Making a map and tiles
+        // Setting a higher initial zoom to make effect more obvious
+        const mymap = L.map('checkinMap').setView([0, 0], 1); //0,0 is lon and lat, 1 is no zoom
+        const attribution =
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+        const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        const tiles = L.tileLayer(tileUrl, { attribution }); //put the attribution in {}, because an object is expected
+        tiles.addTo(mymap);
+
+
+        //client html page: make a get request to a route on the server, have that route return all the data in the database on the server
+        getData();
+
+        const selfies = [];
+
+        document.getElementById('time').addEventListener('click', event => {
+            sortData((a,b) => b.time - a.time);
+        })
+
+        function sortData(compare) {
+            for (let item of selfies) {
+                item.elt.remove();
+            }
+            selfies.sort(compare);
+            for (let item of selfies) {
+                document.body.append(item.elt);
+            }
+        }
+
+
+        async function getData() {
+            const response = await fetch('/api');
+            const data = await response.json();
+            // for .. of (javascript looping iterable objects)
+            for (item of data) {
+                //put the location on the map
+                const marker = L.marker([item.lat, item.lon]).addTo(mymap);
+                //show information when user clicks the marker
+                const photo = item.image64
+                marker.bindPopup(`<img src='${photo}'/>`).openPopup();
+
+                /*
+                const root = document.createElement('p');
+                const mood = document.createElement('div');
+                const geo = document.createElement('div');
+                const date = document.createElement('div');
+                const image = document.createElement('img');
+
+                mood.textContent = `mood: ${item.mood}`;
+                geo.textContent = `${item.lat.toFixed(2)}°, ${item.lon.toFixed(2)}°`;
+                const dateString = new Date(item.timestamp).toLocaleString();
+                date.textContent = dateString;
+                image.src = item.image64;
+            
+                root.append(mood, geo, date, image);
+                selfies.push({ elt: root, time: item.timestamp, mood: item.mood });
+                document.body.append(root);
+                */
+            }
+            console.log(data);
+        }
+    </script>
+</body>
+</html>
