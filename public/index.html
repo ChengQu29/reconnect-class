@@ -7,28 +7,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/p5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/addons/p5.dom.min.js"></script>
-    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+      integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>ReConnect</title>
 </head>
 <body>
-    <h1>Data Selfie App</h1>
-    <div><a href="/">check in</a> | <a href="/logs.html">view checkins</a></div>
-    <p>
-        latitude: <span id="latitude"></span>&deg; longitude: <span id="longitude"></span>&deg;
-    </p>
-    <p>
-        The weather here is <span id="summary"></span> with a temperature of <span id="temperature"></span>&deg; celsius.
-    </p>
-    <p>
+
+    <!--<p>
         <input id = "mood" type="text">
         <button id="submit">submit</button>
-    </p>
+    </p>-->
+
+    <div class="join-container">
+        <header class="join-header">
+            <h1><i class="fas fa-smile"></i> ReConnect Class</h1>
+        </header>
+        <main class="join-main">
+            <div>
+                <p>
+                    You are currently at latitude: <span id="latitude"></span>&deg;, longitude: <span id="longitude"></span>&deg;. The weather here is <span id="summary"></span> with a temperature of <span id="temperature"></span>&deg; celsius.
+                </p>
+                <p>
+                    Join to see who is close to you.
+                </p>
+                <!--<a href="/logs.html">view checkins</a>-->
+            </div>
+            <form action="/logs.html">
+                <div class="form-control">
+                    <label for="username">Username</label>
+                    <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        placeholder="Enter username..."
+                        required
+                    />
+                </div>
+                <div class="form-control">
+                    <label for="room">Room</label>
+                    <select name="room" id="room">
+                        <option value="BC">BC</option>
+                        <option value="AB">AB</option>
+                        <option value="SK">SK</option>
+                        <option value="MB">MB</option>
+                        <option value="ON">ON</option>
+                        <option value="QC">QC</option>
+                        <option value="PE">PE</option>
+                        <option value="NS">NS</option>
+                        <option value="NB">NB</option>
+                        <option value="NL">NL</option>
+                        <option value="YK">YK</option>
+                        <option value="NT">NT</option>
+                        <option value="NU">NU</option>
+                    </select>
+                </div>
+                <div id = "sketch-holder"></div>
+                <button type="submit" class="btn">Join Chat</button>
+            </form>
+        </main>
+    </div>
     
     <script>
+        let capture;
         function setup(){
+            //createCanvas(160, 120);
+            //background(255, 0, 200);
             noCanvas();
             //createCapture is a p5 library function
             const video = createCapture(VIDEO);
-            video.size(160,120);
+            video.size(200,120);
+            video.parent('sketch-holder');
 
             let lat, lon;
             const button = document.getElementById('submit');

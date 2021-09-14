@@ -15,32 +15,87 @@
       integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
       crossorigin=""
     ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+      integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
+      crossorigin="anonymous"
+    />
     <style>
       #checkinMap {
-        height: 360px;
+        height: 750px;
+        width: 850px;
       }
     </style>
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <title>ReConnect</title>
 </head>
 <body>
-    
-    <h1>Data Selfie App</h1>
-    <div><a href="/">back</a>
-    <br />
-    <div>sort by <a href="#" id = "time">time</a></div>
-    <div id = "checkinMap"></div>
+    <h1>Let's re-connect, class!</h1>
+    <div class="flex-container">
+        
+        <div class="flex-child">
+            
+            <h5>
+                <div><a href="/">back</a>
+                    <br />
+                    <div>sort by <a href="#" id = "time">time</a></div>
+                <div id = "checkinMap"></div>
+            </h5>
+        
+        </div>
+        
+        <div class="flex-child">
+          
+            <div class="chat-container">
+                <header class="chat-header">
+                  <h1><i class="fas fa-smile"></i> ReConnect Class</h1>
+                  <a id="leave-btn" class="btn">Leave Room</a>
+                </header>
+                <main class="chat-main">
+                  <div class="chat-sidebar">
+                    <h3><i class="fas fa-comments"></i> Room Name:</h3>
+                    <h2 id="room-name"></h2>
+                    <h3><i class="fas fa-users"></i> Users</h3>
+                    <ul id="users"></ul>
+                  </div>
+                  <div class="chat-messages"></div>
+                </main>
+                <div class="chat-form-container">
+                  <form id="chat-form">
+                    <input
+                      id="msg"
+                      type="text"
+                      placeholder="Enter Message"
+                      required
+                      autocomplete="off"
+                    />
+                    <button class="btn"><i class="fas fa-paper-plane"></i> Send</button>
+                  </form>
+                </div>
+            </div>
+        
+        </div>
+        
+    </div>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js"
+      integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4="
+      crossorigin="anonymous"
+    ></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/main.js"></script>
 
     <script>
         // Making a map and tiles
         // Setting a higher initial zoom to make effect more obvious
-        const mymap = L.map('checkinMap').setView([0, 0], 1); //0,0 is lon and lat, 1 is no zoom
+        const mymap = L.map('checkinMap').setView([0, 0], 2); //0,0 is lon and lat, 1 is no zoom
         const attribution =
             '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
         const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
         const tiles = L.tileLayer(tileUrl, { attribution }); //put the attribution in {}, because an object is expected
         tiles.addTo(mymap);
-
 
         //client html page: make a get request to a route on the server, have that route return all the data in the database on the server
         getData();
