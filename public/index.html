@@ -18,11 +18,6 @@
 </head>
 <body>
 
-    <!--<p>
-        <input id = "mood" type="text">
-        <button id="submit">submit</button>
-    </p>-->
-
     <div class="join-container">
         <header class="join-header">
             <h1><i class="fas fa-smile"></i> ReConnect Class</h1>
@@ -67,8 +62,12 @@
                     </select>
                 </div>
                 <div id = "sketch-holder"></div>
-                <button type="submit" class="btn">Join Chat</button>
+
+                <div class="form-control">
+                    <button id="submit"><a href="/logs.html"></a>submit</button>
+                </div>
             </form>
+            
         </main>
     </div>
     
@@ -80,13 +79,13 @@
             noCanvas();
             //createCapture is a p5 library function
             const video = createCapture(VIDEO);
-            video.size(200,120);
+            video.size(140,100);
             video.parent('sketch-holder');
 
             let lat, lon;
             const button = document.getElementById('submit');
             button.addEventListener('click', async event => {
-                const mood = document.getElementById('mood').value;
+                const mood = ""; //todo
                 video.loadPixels();
                 const image64 = video.canvas.toDataURL();
                 //get the geolocation data, and make an javascript object, put the data in
