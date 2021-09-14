@@ -15,6 +15,12 @@
 	padding: 0;
 }
 
+h1 {
+	display: grid;
+	place-items: center;
+	padding-bottom: 20px;
+}
+
 body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 16px;
@@ -44,7 +50,7 @@ a {
 .chat-container {
 	max-width: 500px;
 	background: #fff;
-	margin: 30px auto;
+	margin: 1px auto; /*chat window margin from the top*/
 	overflow: hidden;
 }
 
@@ -61,7 +67,7 @@ a {
 
 .chat-main {
 	display: grid;
-	height: 600px;
+	height: 550px; /*chat window height*/
 	grid-template-columns: 1fr 3fr;
 }
 
@@ -118,7 +124,7 @@ a {
 .chat-messages .message-receive {
 	padding: 10px;
 	margin-bottom: 15px;
-	margin-right: 50px; /*message align to the left*/
+	margin-right: 80px; /*message align to the left*/
 	background-color: var(--chat-color);
 	border-radius: 20px;
 	overflow-wrap: break-word;
